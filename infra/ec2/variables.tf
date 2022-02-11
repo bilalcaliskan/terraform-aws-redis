@@ -30,11 +30,11 @@ variable "instance_name_prefix" {
 }
 
 variable "public_key" {
-  default = "/tmp/ubuntu_ec2.pub"
+  default = "/home/runner/ubuntu_ec2.pub"
 }
 
 variable "private_key" {
-  default = "/tmp/ubuntu_ec2.pem"
+  default = "/home/runner/ubuntu_ec2.pem"
 }
 
 variable "ansible_user" {
