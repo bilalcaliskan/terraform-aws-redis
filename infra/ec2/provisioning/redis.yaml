@@ -1,0 +1,13 @@
+---
+
+- name: Redis role execution play
+  hosts: all
+  become: true
+  roles:
+    - role: bilalcaliskan.redis
+      vars:
+        install_redis: true
+        firewalld_enabled: false
+        redis_max_memory: 500mb
+        redis_enable_rdb: false
+

@@ -1,0 +1,86 @@
+name: Terraform Destroy Workflow
+
+# https://blog.testdouble.com/posts/2021-12-07-elevate-your-terraform-workflow-with-github-actions/
+
+on:
+  workflow_dispatch:
+    inputs:
+      aws_region:
+        description: "AWS Region to use"
+        required: true
+      aws_bucket_name:
+        description: "AWS S3 Bucket to store TF States"
+        required: true
+      aws_bucket_key_path:
+        description: "AWS S3 Bucket Key Path to store state"
+        required: true
+        default: "state/terraform.tfstate"
+      aws_access_key_id:
+        description: "Access key id to access AWS"
+        required: true
+      aws_secret_access_key:
+        description: "Secret access key to access AWS"
+        required: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.5
+
+      - name: Run terraform fmt check
+        run: terraform fmt -check -diff -recursive ./infra/ec2
+
+  plan_and_destroy:
+    name: Plan and Destroy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.5
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ github.event.inputs.aws_region }}
+          aws-access-key-id: ${{ github.event.inputs.aws_access_key_id }}
+          aws-secret-access-key: ${{ github.event.inputs.aws_secret_access_key }}
+      
+      - name: Setup bucket
+        run: |
+          cd ./infra/ec2
+          sed 's/<BUCKET_NAME>/${{ github.event.inputs.aws_bucket_name }}/g' terraform.tf | tee terraform.tf
+          sed 's/<AWS_REGION>/${{ github.event.inputs.aws_region }}/g' terraform.tf | tee terraform.tf
+          sed 's/<BUCKET_KEY_PATH>/${{ github.event.inputs.aws_bucket_key_path }}/g' terraform.tf | tee terraform.tf
+
+      - name: Initialize Terraform
+        run: |
+          cd ./infra/ec2
+          terraform init -input=false
+
+      - name: Plan Terraform
+        id: plan
+        continue-on-error: true
+        run: |
+          cd ./infra/ec2
+          terraform plan -input=false
+
+      - name: Destroy Terraform
+        if: steps.plan.outcome == 'success'
+        id: destroy
+        continue-on-error: true
+        run: |
+          cd ./infra/ec2
+          terraform destroy -input=false -auto-approve
+

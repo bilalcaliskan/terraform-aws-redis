@@ -1,9 +1,8 @@
-variable "instance_count" {
-  description = "Number of EC2 instances to deploy"
-  type        = number
-  # TODO: change as 3
-  default = 1
-}
+#variable "instance_count" {
+#  description = "Number of EC2 instances to deploy"
+#  type        = number
+#  default = 1
+#}
 
 variable "instance_type" {
   description = "Type of EC2 instance to use"
@@ -39,5 +38,6 @@ variable "private_key" {
 }
 
 variable "ansible_user" {
-  default = "ec2-user"
+  default = "ubuntu"
 }
+
