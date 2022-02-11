@@ -66,8 +66,21 @@ jobs:
         run: |
           cd ./infra/ec2
           sed 's/<BUCKET_NAME>/${{ github.event.inputs.aws_bucket_name }}/g' provisioning/create_key_pair.sh | tee provisioning/create_key_pair.sh
-          chmod +x provisioning/create_key_pair.sh
-          bash provisioning/create_key_pair.sh
+          aws s3 ls s3://skysports-my-tf-states/keys/ubuntu_ec2.pem
+          if [[ $? -ne 0 ]]; then
+              echo "it does not exist, creating a fresh key pair and uploading"
+              ssh-keygen -t rsa -b 2048 -f /home/runner/ubuntu_ec2.pem -q -P ''
+              ssh-keygen -y -f /home/runner/ubuntu_ec2.pem > /home/runner/ubuntu_ec2.pub
+              aws s3api put-object --bucket skysports-my-tf-states --key keys/ubuntu_ec2.pem --body /home/runner/ubuntu_ec2.pem
+              aws s3api put-object --bucket skysports-my-tf-states --key keys/ubuntu_ec2.pub --body /home/runner/ubuntu_ec2.pub
+          else
+              echo "it exists, downloading existing"
+              echo "y" | aws s3api get-object --bucket skysports-my-tf-states --key keys/ubuntu_ec2.pem /home/runner/ubuntu_ec2.pem
+              echo "y" | aws s3api get-object --bucket skysports-my-tf-states --key keys/ubuntu_ec2.pub /home/runner/ubuntu_ec2.pub
+          fi
+
+          chmod 400 /home/runner/ubuntu_ec2.pem
+          chmod 400 /home/runner/ubuntu_ec2.pub
 
       - name: Setup bucket
         run: |
