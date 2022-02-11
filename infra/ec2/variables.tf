@@ -30,11 +30,11 @@ variable "instance_name_prefix" {
 }
 
 variable "public_key" {
-  default = "~/.ssh/ubuntu_ec2.pub"
+  default = "/tmp/ubuntu_ec2.pub"
 }
 
 variable "private_key" {
-  default = "~/.ssh/ubuntu_ec2.pem"
+  default = "/tmp/ubuntu_ec2.pem"
 }
 
 variable "ansible_user" {
