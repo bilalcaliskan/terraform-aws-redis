@@ -61,9 +61,10 @@ jobs:
 
       - name: Run key pair generator script
         run: |
-          sed 's/<BUCKET_NAME>/${{ github.event.inputs.aws_bucket_name }}/g' infra/ec2/provisioning/create_key_pair.sh | tee infra/ec2/provisioning/create_key_pair.sh
-          chmod +x ./infra/ec2/provisioning/create_key_pair.sh
-          ./infra/ec2/provisioning/create_key_pair.sh
+          cd ./infra/ec2
+          sed 's/<BUCKET_NAME>/${{ github.event.inputs.aws_bucket_name }}/g' provisioning/create_key_pair.sh | tee provisioning/create_key_pair.sh
+          chmod +x provisioning/create_key_pair.sh
+          ./provisioning/create_key_pair.sh
 
       - name: Setup bucket
         run: |
