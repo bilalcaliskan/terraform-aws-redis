@@ -1,7 +1,9 @@
 #!/bin/bash
 
-object_exists=$(aws s3api head-object --bucket <BUCKET_NAME> --key keys/ubuntu_ec2.pem || true)
-if [ -z "$object_exists" ]; then
+# object_exists=$(aws s3api head-object --bucket <BUCKET_NAME> --key keys/ubuntu_ec2.pem || true)
+# if [ -z "$object_exists" ]; then
+aws s3 ls s3://<BUCKET_NAME>/keys/ubuntu_ec2.pem
+if [[ $? -ne 0 ]]; then
     echo "it does not exist, creating a fresh key pair and uploading"
     ssh-keygen -t rsa -b 2048 -f /tmp/ubuntu_ec2.pem -q -P ''
     ssh-keygen -y -f /tmp/ubuntu_ec2.pem > ~/tmp/ubuntu_ec2.pub
