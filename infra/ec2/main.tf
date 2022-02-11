@@ -111,7 +111,7 @@ resource "aws_security_group" "market-sg" {
 
 resource "aws_instance" "redis_server" {
   # count                  = var.instance_count
-  count = 1
+  count                  = 1
   ami                    = data.aws_ami.ubuntu.id
   vpc_security_group_ids = [aws_security_group.redis-sg.id, aws_security_group.market-sg.id]
   instance_type          = var.instance_type
@@ -160,7 +160,7 @@ resource "local_file" "hosts_cfg" {
 }
 
 resource "null_resource" "ansible" {
-  depends_on = [aws_instance.redis_server,local_file.hosts_cfg]
+  depends_on = [aws_instance.redis_server, local_file.hosts_cfg]
   provisioner "local-exec" {
     command = <<EOT
       sleep 120;
