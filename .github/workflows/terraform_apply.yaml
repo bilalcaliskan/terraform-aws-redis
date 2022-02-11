@@ -93,4 +93,3 @@ jobs:
         run: |
           cd ./infra/ec2
           terraform apply -input=false -auto-approve
-
