@@ -7,9 +7,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket  = "<BUCKET_NAME>"
-    key     = "<BUCKET_KEY_PATH>"
-    region  = "<AWS_REGION>"
+    bucket  = "BUCKET_NAME"
+    key     = "BUCKET_KEY_PATH"
+    region  = "AWS_REGION"
     encrypt = true
   }
 
