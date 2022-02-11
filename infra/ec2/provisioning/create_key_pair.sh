@@ -13,5 +13,5 @@ else
     echo "y" | aws s3api get-object --bucket <BUCKET_NAME> --key keys/ubuntu_ec2.pub ~/.ssh/ubuntu_ec2.pub
 fi
 
-chmod 600 ~/.ssh/ubuntu_ec2.pem
-chmod 600 ~/.ssh/ubuntu_ec2.pub
+#chmod 600 ~/.ssh/ubuntu_ec2.pem
+#chmod 600 ~/.ssh/ubuntu_ec2.pub

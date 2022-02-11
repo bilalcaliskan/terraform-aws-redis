@@ -82,15 +82,13 @@ jobs:
 
       - name: Plan Terraform
         id: plan
-        continue-on-error: true
         run: |
           cd ./infra/ec2
           terraform plan -input=false
 
       - name: Apply Terraform
-        if: steps.plan.outcome == 'success'
+        # if: steps.plan.outcome == 'success'
         id: apply
-        continue-on-error: true
         run: |
           cd ./infra/ec2
           terraform apply -input=false -auto-approve

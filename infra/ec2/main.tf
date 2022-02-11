@@ -170,4 +170,3 @@ resource "null_resource" "ansible" {
     EOT
   }
 }
-

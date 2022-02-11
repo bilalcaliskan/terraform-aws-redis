@@ -79,16 +79,13 @@ jobs:
 
       - name: Plan Terraform
         id: plan
-        continue-on-error: true
         run: |
           cd ./infra/ec2
           terraform plan -input=false
 
       - name: Destroy Terraform
-        if: steps.plan.outcome == 'success'
+        # if: steps.plan.outcome == 'success'
         id: destroy
-        continue-on-error: true
         run: |
           cd ./infra/ec2
           terraform destroy -input=false -auto-approve
-
