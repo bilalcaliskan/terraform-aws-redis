@@ -15,5 +15,5 @@ else
     echo "y" | aws s3api get-object --bucket skysports-my-tf-states --key keys/ubuntu_ec2.pub /tmp/ubuntu_ec2.pub
 fi
 
-chmod 600 /tmp/ubuntu_ec2.pem
-chmod 600 /tmp/ubuntu_ec2.pub
+chmod 400 /tmp/ubuntu_ec2.pem
+chmod 400 /tmp/ubuntu_ec2.pub
