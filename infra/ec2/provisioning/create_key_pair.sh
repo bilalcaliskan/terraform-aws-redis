@@ -6,7 +6,7 @@ aws s3 ls s3://<BUCKET_NAME>/keys/ubuntu_ec2.pem
 if [[ $? -ne 0 ]]; then
     echo "it does not exist, creating a fresh key pair and uploading"
     ssh-keygen -t rsa -b 2048 -f /tmp/ubuntu_ec2.pem -q -P ''
-    ssh-keygen -y -f /tmp/ubuntu_ec2.pem > ~/tmp/ubuntu_ec2.pub
+    ssh-keygen -y -f /tmp/ubuntu_ec2.pem > /tmp/ubuntu_ec2.pub
     aws s3api put-object --bucket <BUCKET_NAME> --key keys/ubuntu_ec2.pem --body /tmp/ubuntu_ec2.pem
     aws s3api put-object --bucket <BUCKET_NAME> --key keys/ubuntu_ec2.pub --body /tmp/ubuntu_ec2.pub
 else
