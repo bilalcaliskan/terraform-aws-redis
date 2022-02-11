@@ -29,8 +29,8 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-resource "aws_key_pair" "redis_key" {
-  key_name   = "rediskeypair"
+resource "aws_key_pair" "ubuntu_ec2_key" {
+  key_name   = "ubuntuec2keypair"
   public_key = file(var.public_key)
 }
 
@@ -115,7 +115,7 @@ resource "aws_instance" "redis_server" {
   ami                    = data.aws_ami.ubuntu.id
   vpc_security_group_ids = [aws_security_group.redis-sg.id, aws_security_group.market-sg.id]
   instance_type          = var.instance_type
-  key_name               = aws_key_pair.redis_key.key_name
+  key_name               = aws_key_pair.ubuntu_ec2_key.key_name
   subnet_id              = tolist(data.aws_subnet_ids.current.ids)[count.index % length(data.aws_subnet_ids.current.ids)]
   tags = {
     Name    = "${var.instance_name_prefix}${count.index + 1}"

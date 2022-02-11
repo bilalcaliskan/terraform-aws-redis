@@ -58,7 +58,13 @@ jobs:
           aws-region: ${{ github.event.inputs.aws_region }}
           aws-access-key-id: ${{ github.event.inputs.aws_access_key_id }}
           aws-secret-access-key: ${{ github.event.inputs.aws_secret_access_key }}
-      
+
+      - name: Run key pair generator script
+        run: |
+          sed 's/<BUCKET_NAME>/${{ github.event.inputs.aws_bucket_name }}/g' infra/ec2/provisioning/create_key_pair.sh | tee infra/ec2/provisioning/create_key_pair.sh
+          chmod +x ./infra/ec2/provisioning/create_key_pair.sh
+          ./infra/ec2/provisioning/create_key_pair.sh
+
       - name: Setup bucket
         run: |
           cd ./infra/ec2
