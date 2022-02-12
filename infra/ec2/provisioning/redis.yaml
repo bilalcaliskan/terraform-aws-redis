@@ -10,3 +10,9 @@
         firewalld_enabled: false
         redis_max_memory: 500mb
         redis_enable_rdb: false
+  tasks:
+    - lineinfile:
+        dest: /etc/hosts
+        line: "{{ hostvars[item].inventory_hostname }} {{ hostvars[item].dns }}"
+        state: present
+      loop: "{{ play_hosts }}"
