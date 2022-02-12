@@ -31,7 +31,7 @@
       docker_container:
         name: frontend
         #image: bilalcaliskan/frontend:latest
-        image: dummy:frontend
+        image: REGISTRY_URL/dummy:frontend
         state: started
         restart: yes
         ports:
@@ -43,7 +43,7 @@
       docker_container:
         name: admin-fe
         # image: bilalcaliskan/admin-fe
-        image: dummy:admin-fe
+        image: REGISTRY_URL/dummy:admin-fe
         state: started
         restart: yes
         ports:
@@ -55,7 +55,7 @@
       docker_container:
         name: backend
         # image: bilalcaliskan/backend
-        image: dummy:backend
+        image: REGISTRY_URL/dummy:backend
         state: started
         restart: yes
         ports:
