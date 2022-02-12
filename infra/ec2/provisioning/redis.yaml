@@ -11,8 +11,44 @@
         redis_max_memory: 500mb
         redis_enable_rdb: false
   tasks:
-    - lineinfile:
-        dest: /etc/hosts
-        line: "{{ hostvars[item].inventory_hostname }} {{ hostvars[item].dns }}"
+    - name: install pip3
+      apt: 
+        name: python3-pip 
         state: present
-      loop: "{{ play_hosts }}"
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: Run frontend
+      docker_container:
+        name: frontend
+        image: <your username>/frontend
+        state: started
+        restart: yes
+        ports:
+        - "3000:3000"
+        etc_hosts:
+            "redis-internal": "{{ inventory_hostname }}"
+
+    - name: Run admin-fe
+      docker_container:
+        name: admin-fe
+        image: <your username>/admin-fe
+        state: started
+        restart: yes
+        ports:
+        - "3001:3000"
+        etc_hosts:
+            "redis-internal": "{{ inventory_hostname }}"
+
+    - name: Run backend
+      docker_container:
+        name: backend
+        image: <your username>/backend
+        state: started
+        restart: yes
+        ports:
+        - "4000:4000"
+        etc_hosts:
+            "redis-internal": "{{ inventory_hostname }}"

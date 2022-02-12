@@ -130,12 +130,8 @@ resource "aws_instance" "ubuntu_server" {
     sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-    sudo apt install docker-ce
+    sudo apt install -y docker-ce
     sudo systemctl enable --now docker
-
-    docker run -p 3000:3000 -d <your username>/frontend
-    docker run -p 3001:3000 -d <your username>/admin-fe
-    docker run -p 4000:4000 -d <your username>/backend
   EOF
 
   root_block_device {
