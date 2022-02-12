@@ -30,16 +30,16 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_key_pair" "ubuntu_ec2_key" {
-  key_name   = "ubuntuec2keypair"
+  key_name   = var.key_pair_name
   public_key = file(var.public_key)
 }
 
-resource "aws_security_group" "redis-sg" {
-  name = "redis-sg"
+resource "aws_security_group" "ubuntu-sg" {
+  name = "ubuntu-sg"
   tags = {
-    Name    = "redis-sg"
-    Service = "redis"
-    Region  = var.aws_region
+    Name = "ubuntu-sg"
+    #Service = "redis"
+    Region = var.aws_region
   }
 
   ingress {
@@ -109,19 +109,19 @@ resource "aws_security_group" "market-sg" {
   }
 }
 
-resource "aws_instance" "redis_server" {
+resource "aws_instance" "ubuntu_server" {
   # count                  = var.instance_count
   count                  = 1
   ami                    = data.aws_ami.ubuntu.id
-  vpc_security_group_ids = [aws_security_group.redis-sg.id, aws_security_group.market-sg.id]
+  vpc_security_group_ids = [aws_security_group.ubuntu-sg.id, aws_security_group.market-sg.id]
   instance_type          = var.instance_type
   key_name               = aws_key_pair.ubuntu_ec2_key.key_name
   subnet_id              = tolist(data.aws_subnet_ids.current.ids)[count.index % length(data.aws_subnet_ids.current.ids)]
   tags = {
-    Name    = "${var.instance_name_prefix}${count.index + 1}"
-    Service = "redis"
-    Region  = var.aws_region
-    Ami     = data.aws_ami.ubuntu.id
+    Name = "${var.instance_name_prefix}${count.index + 1}"
+    # Service = "redis"
+    Region = var.aws_region
+    Ami    = data.aws_ami.ubuntu.id
   }
   user_data = <<-EOF
     #!/bin/bash
@@ -148,10 +148,10 @@ resource "aws_instance" "redis_server" {
 
 # generate inventory file for Ansible
 resource "local_file" "hosts_cfg" {
-  depends_on = [aws_instance.redis_server]
+  depends_on = [aws_instance.ubuntu_server]
   content = templatefile("${path.module}/provisioning/hosts.ini.tpl",
     {
-      redis_instances = aws_instance.redis_server.*.public_ip
+      redis_instances = aws_instance.ubuntu_server.*.public_ip
       ansible_user    = var.ansible_user
       private_key     = var.private_key
     }
@@ -160,7 +160,7 @@ resource "local_file" "hosts_cfg" {
 }
 
 resource "null_resource" "ansible" {
-  depends_on = [aws_instance.redis_server, local_file.hosts_cfg]
+  depends_on = [aws_instance.ubuntu_server, local_file.hosts_cfg]
   provisioner "local-exec" {
     command = <<EOT
       sleep 120;

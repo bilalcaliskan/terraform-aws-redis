@@ -26,7 +26,7 @@ variable "root_block_device_size" {
 variable "instance_name_prefix" {
   description = "Instance name prefix while creating EC2 instances"
   type        = string
-  default     = "redisnode0"
+  default     = "node0"
 }
 
 variable "public_key" {
@@ -41,3 +41,8 @@ variable "ansible_user" {
   default = "ubuntu"
 }
 
+variable "key_pair_name" {
+  description = "Key pair name to create on AWS to access created EC2 instances"
+  type        = string
+  default     = "ubuntuec2keypair"
+}

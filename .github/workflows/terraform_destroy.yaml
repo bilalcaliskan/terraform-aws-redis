@@ -63,11 +63,15 @@ jobs:
         run: |
           cd ./infra/ec2
           sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/create_key_pair.sh
+          chmod +x provisioning/create_key_pair.sh
+          bash provisioning/create_key_pair.sh
+
+      - name: Setup S3 Bucket
+        run: |
+          cd ./infra/ec2
           sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
           sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
           sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
-          chmod +x provisioning/create_key_pair.sh
-          bash provisioning/create_key_pair.sh
 
       - name: Initialize Terraform
         run: |
@@ -81,7 +85,7 @@ jobs:
           terraform plan -input=false
 
       - name: Destroy Terraform
-        # if: steps.plan.outcome == 'success'
+        if: steps.plan.outcome == 'success'
         id: destroy
         run: |
           cd ./infra/ec2
