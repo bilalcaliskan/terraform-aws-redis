@@ -10,4 +10,3 @@
         firewalld_enabled: false
         redis_max_memory: 500mb
         redis_enable_rdb: false
-
