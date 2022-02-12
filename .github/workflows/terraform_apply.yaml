@@ -24,6 +24,7 @@ on:
       docker_registry_url:
         description: "Base registry URL to pull Docker images"
         required: true
+        default: "docker.io"
       docker_registry_username:
         description: "Docker registry username to pull Docker images"
         required: true
