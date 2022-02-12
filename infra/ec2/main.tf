@@ -172,7 +172,7 @@ resource "null_resource" "ansible" {
 
   provisioner "remote-exec" {
     command = <<EOT
-      sudo echo ${element(aws_instance.ubuntu_server.*.public_ip,0)} redis.internal redis >> /etc/hosts
+      sudo echo ${element(aws_instance.ubuntu_server.*.public_ip, 0)} redis.internal redis >> /etc/hosts
     EOT
   }
 }
