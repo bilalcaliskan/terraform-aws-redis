@@ -169,10 +169,4 @@ resource "null_resource" "ansible" {
       ansible-playbook -i provisioning/hosts.ini provisioning/redis.yaml;
     EOT
   }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo echo ${element(aws_instance.ubuntu_server.*.public_ip, 0)} redis.internal redis >> /etc/hosts",
-    ]
-  }
 }
