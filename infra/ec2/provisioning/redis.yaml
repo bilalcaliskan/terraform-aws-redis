@@ -23,7 +23,7 @@
     - name: Run frontend
       docker_container:
         name: frontend
-        image: <your username>/frontend
+        image: bilalcaliskan/frontend:latest
         state: started
         restart: yes
         ports:
@@ -34,7 +34,7 @@
     - name: Run admin-fe
       docker_container:
         name: admin-fe
-        image: <your username>/admin-fe
+        image: bilalcaliskan/admin-fe
         state: started
         restart: yes
         ports:
@@ -45,7 +45,7 @@
     - name: Run backend
       docker_container:
         name: backend
-        image: <your username>/backend
+        image: bilalcaliskan/backend
         state: started
         restart: yes
         ports:
