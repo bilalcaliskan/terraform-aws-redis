@@ -21,7 +21,6 @@ on:
       aws_secret_access_key:
         description: "Secret access key to access AWS"
         required: true
-
 jobs:
   lint:
     name: Lint

@@ -20,10 +20,18 @@
       pip:
         name: docker
 
+    - name: Log into private registry and force re-authorization
+      docker_login:
+        registry: REGISTRY_URL
+        username: REGISTRY_USERNAME
+        password: REGISTRY_PASSWORD
+        reauthorize: yes
+
     - name: Run frontend
       docker_container:
         name: frontend
-        image: bilalcaliskan/frontend:latest
+        #image: bilalcaliskan/frontend:latest
+        image: dummy:frontend
         state: started
         restart: yes
         ports:
@@ -34,7 +42,8 @@
     - name: Run admin-fe
       docker_container:
         name: admin-fe
-        image: bilalcaliskan/admin-fe
+        # image: bilalcaliskan/admin-fe
+        image: dummy:admin-fe
         state: started
         restart: yes
         ports:
@@ -45,7 +54,8 @@
     - name: Run backend
       docker_container:
         name: backend
-        image: bilalcaliskan/backend
+        # image: bilalcaliskan/backend
+        image: dummy:backend
         state: started
         restart: yes
         ports:

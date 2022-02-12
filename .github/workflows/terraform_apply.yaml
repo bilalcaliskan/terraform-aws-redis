@@ -21,7 +21,15 @@ on:
       aws_secret_access_key:
         description: "Secret access key to access AWS"
         required: true
-
+      docker_registry_url:
+        description: "Base registry URL to pull Docker images"
+        required: true
+      docker_registry_username:
+        description: "Docker registry username to pull Docker images"
+        required: true
+      docker_registry_password:
+        description: "Docker registry password to pull Docker images"
+        required: true
 jobs:
   lint:
     name: Lint
@@ -75,6 +83,13 @@ jobs:
           sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
           sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
           sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
+
+      - name: Setup Docker registry
+        run: |
+          cd ./infra/ec2
+          sed -i "s/REGISTRY_URL/${{ github.event.inputs.docker_registry_url }}/g" provisioning/redis.yaml
+          sed -i "s/REGISTRY_USERNAME/${{ github.event.inputs.docker_registry_username }}/g" provisioning/redis.yaml
+          sed -i "s/REGISTRY_PASSWORD/${{ github.event.inputs.docker_registry_password }}/g" provisioning/redis.yaml
 
       - name: Initialize Terraform
         run: |
