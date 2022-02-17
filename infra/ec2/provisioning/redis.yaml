@@ -3,6 +3,11 @@
 - name: Redis role execution play
   hosts: all
   become: true
+  pre_tasks:
+    - name: Full upgrade
+      apt:
+        update_cache: true
+        upgrade: full
   roles:
     - role: bilalcaliskan.redis
       vars:
@@ -10,57 +15,3 @@
         firewalld_enabled: false
         redis_max_memory: 500mb
         redis_enable_rdb: false
-  tasks:
-    - name: install pip3
-      apt: 
-        name: python3-pip 
-        state: present
-
-    - name: Install Docker Module for Python
-      pip:
-        name: docker
-
-    - name: Log into private registry and force re-authorization
-      docker_login:
-        registry: REGISTRY_URL
-        username: REGISTRY_USERNAME
-        password: REGISTRY_PASSWORD
-        reauthorize: yes
-
-    - name: Restart docker
-      service:
-        name: docker
-        state: restarted
-
-    - name: Run frontend
-      docker_container:
-        name: frontend
-        image: REGISTRY_URL/dummy:frontend
-        state: started
-        restart: yes
-        ports:
-        - "3000:3000"
-        etc_hosts:
-            "redis-internal": "{{ inventory_hostname }}"
-
-    - name: Run admin_fe
-      docker_container:
-        name: admin_fe
-        image: REGISTRY_URL/dummy:admin_fe
-        state: started
-        restart: yes
-        ports:
-        - "3001:3000"
-        etc_hosts:
-            "redis-internal": "{{ inventory_hostname }}"
-
-    - name: Run backend
-      docker_container:
-        name: backend
-        image: REGISTRY_URL/dummy:backend
-        state: started
-        restart: yes
-        ports:
-        - "4000:4000"
-        etc_hosts:
-            "redis-internal": "{{ inventory_hostname }}"

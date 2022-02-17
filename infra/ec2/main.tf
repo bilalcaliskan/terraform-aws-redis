@@ -29,15 +29,15 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-resource "aws_key_pair" "ubuntu_ec2_key" {
+resource "aws_key_pair" "redis_ec2_key" {
   key_name   = var.key_pair_name
   public_key = file(var.public_key)
 }
 
-resource "aws_security_group" "ubuntu-sg" {
-  name = "ubuntu-sg"
+resource "aws_security_group" "redis-sg" {
+  name = "redis-sg"
   tags = {
-    Name = "ubuntu-sg"
+    Name = "redis-sg"
     #Service = "redis"
     Region = var.aws_region
   }
@@ -72,66 +72,25 @@ resource "aws_security_group" "ubuntu-sg" {
   }
 }
 
-resource "aws_security_group" "market-sg" {
-  name = "market-sg"
-  tags = {
-    Name   = "market-sg"
-    Region = var.aws_region
-  }
-
-  ingress {
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 3001
-    to_port     = 3001
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 4000
-    to_port     = 4000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-}
-
-resource "aws_instance" "ubuntu_server" {
-  # count                  = var.instance_count
-  count                  = 1
+resource "aws_instance" "redis_server" {
+  count                  = var.instance_count
   ami                    = data.aws_ami.ubuntu.id
-  vpc_security_group_ids = [aws_security_group.ubuntu-sg.id, aws_security_group.market-sg.id]
+  vpc_security_group_ids = [aws_security_group.redis-sg.id]
   instance_type          = var.instance_type
-  key_name               = aws_key_pair.ubuntu_ec2_key.key_name
+  key_name               = aws_key_pair.redis_ec2_key.key_name
   subnet_id              = tolist(data.aws_subnet_ids.current.ids)[count.index % length(data.aws_subnet_ids.current.ids)]
+  
   tags = {
     Name = "${var.instance_name_prefix}${count.index + 1}"
-    # Service = "redis"
+    Service = "redis"
     Region = var.aws_region
     Ami    = data.aws_ami.ubuntu.id
   }
+  
   user_data = <<-EOF
     #!/bin/bash
     sudo apt update
     sudo apt full-upgrade -y
-    sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-    sudo apt install -y docker-ce
-    sudo systemctl enable --now docker
   EOF
 
   root_block_device {
@@ -144,10 +103,10 @@ resource "aws_instance" "ubuntu_server" {
 
 # generate inventory file for Ansible
 resource "local_file" "hosts_cfg" {
-  depends_on = [aws_instance.ubuntu_server]
+  depends_on = [aws_instance.redis_server]
   content = templatefile("${path.module}/provisioning/hosts.ini.tpl",
     {
-      redis_instances = aws_instance.ubuntu_server.*.public_ip
+      redis_instances = aws_instance.redis_server.*.public_ip
       ansible_user    = var.ansible_user
       private_key     = var.private_key
     }
@@ -156,12 +115,12 @@ resource "local_file" "hosts_cfg" {
 }
 
 resource "null_resource" "ansible" {
-  depends_on = [aws_instance.ubuntu_server, local_file.hosts_cfg]
+  depends_on = [aws_instance.redis_server, local_file.hosts_cfg]
   provisioner "local-exec" {
     command = <<EOT
       sleep 120;
       export ANSIBLE_HOST_KEY_CHECKING=False;
-      ansible-galaxy install --force bilalcaliskan.redis,v0.0.5;
+      ansible-galaxy install --force bilalcaliskan.redis,v0.0.6;
       ansible-playbook -i provisioning/hosts.ini provisioning/redis.yaml;
     EOT
   }

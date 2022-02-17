@@ -1,8 +1,8 @@
-#variable "instance_count" {
-#  description = "Number of EC2 instances to deploy"
-#  type        = number
-#  default = 1
-#}
+variable "instance_count" {
+  description = "Number of EC2 instances to deploy"
+  type        = number
+  default = 1
+}
 
 variable "instance_type" {
   description = "Type of EC2 instance to use"
@@ -26,15 +26,15 @@ variable "root_block_device_size" {
 variable "instance_name_prefix" {
   description = "Instance name prefix while creating EC2 instances"
   type        = string
-  default     = "node0"
+  default     = "redisnode0"
 }
 
 variable "public_key" {
-  default = "/home/runner/ubuntu_ec2.pub"
+  default = "/home/runner/redis_ec2.pub"
 }
 
 variable "private_key" {
-  default = "/home/runner/ubuntu_ec2.pem"
+  default = "/home/runner/redis_ec2.pem"
 }
 
 variable "ansible_user" {
@@ -44,5 +44,5 @@ variable "ansible_user" {
 variable "key_pair_name" {
   description = "Key pair name to create on AWS to access created EC2 instances"
   type        = string
-  default     = "ubuntuec2keypair"
+  default     = "redisec2keypair"
 }
