@@ -14,7 +14,7 @@ on:
       aws_bucket_key_path:
         description: "AWS S3 Bucket Key Path to store state"
         required: true
-        default: "terraform.tfstate"
+        default: "redis.tfstate"
       aws_access_key_id:
         description: "Access key id to access AWS"
         required: true
