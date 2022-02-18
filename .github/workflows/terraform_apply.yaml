@@ -1,6 +1,6 @@
-name: Terraform Apply Workflow
+---
 
-# https://blog.testdouble.com/posts/2021-12-07-elevate-your-terraform-workflow-with-github-actions/
+name: Terraform Apply Workflow
 
 on:
   workflow_dispatch:
@@ -21,16 +21,7 @@ on:
       aws_secret_access_key:
         description: "Secret access key to access AWS"
         required: true
-      docker_registry_url:
-        description: "Base registry URL to pull Docker images"
-        required: true
-        default: "docker.io"
-      docker_registry_username:
-        description: "Docker registry username to pull Docker images"
-        required: true
-      docker_registry_password:
-        description: "Docker registry password to pull Docker images"
-        required: true
+
 jobs:
   lint:
     name: Lint
@@ -73,39 +64,24 @@ jobs:
 
       - name: Run key pair generator script
         run: |
-          cd ./infra/ec2
           sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/create_key_pair.sh
           chmod +x provisioning/create_key_pair.sh
           bash provisioning/create_key_pair.sh
 
       - name: Setup S3 Bucket
         run: |
-          cd ./infra/ec2
           sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
           sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
           sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
 
-      - name: Setup Docker registry
-        run: |
-          cd ./infra/ec2
-          sed -i "s/REGISTRY_URL/${{ github.event.inputs.docker_registry_url }}/g" provisioning/redis.yaml
-          sed -i "s/REGISTRY_USERNAME/${{ github.event.inputs.docker_registry_username }}/g" provisioning/redis.yaml
-          sed -i "s/REGISTRY_PASSWORD/${{ github.event.inputs.docker_registry_password }}/g" provisioning/redis.yaml
-
       - name: Initialize Terraform
-        run: |
-          cd ./infra/ec2
-          terraform init -input=false
+        run: terraform init -input=false
 
       - name: Plan Terraform
         id: plan
-        run: |
-          cd ./infra/ec2
-          terraform plan -input=false
+        run: terraform plan -input=false
 
       - name: Apply Terraform
         if: steps.plan.outcome == 'success'
         id: apply
-        run: |
-          cd ./infra/ec2
-          terraform apply -input=false -auto-approve
+        run: terraform apply -input=false -auto-approve
