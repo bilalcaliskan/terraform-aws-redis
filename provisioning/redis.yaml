@@ -1,12 +1,18 @@
 ---
 
-- name: Redis role execution play
+- name: Pre play to wait target hosts come online
   hosts: all
-  become: true
-  pre_tasks:
+  gather_facts: false
+  tasks:
     - name: Wait 60 seconds for target hosts to come online
       wait_for_connection:
         timeout: 60
+
+- name: Redis role execution play
+  hosts: all
+  become: true
+  gather_facts: true
+  pre_tasks:
     - name: Full upgrade
       apt:
         update_cache: true
