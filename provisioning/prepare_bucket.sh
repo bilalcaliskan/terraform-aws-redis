@@ -13,7 +13,7 @@ else
     echo "bucket BUCKET_NAME already exists on region AWS_REGION, skipping"
 fi
 
-object_exists=$(aws s3api head-object --bucket BUCKET_NAME --region AWS_REGION --key keys/redis/redis_ec2.pem 2>&1 || true)
+object_exists=$(aws s3api head-object --bucket BUCKET_NAME --region AWS_REGION --key keys/redis/redis_ec2.pem || true)
 if [ -z "$object_exists" ]; then
     echo "key pair does not exist on bucket BUCKET_NAME, creating a fresh key pair and uploading to S3"
     ssh-keygen -t rsa -b 2048 -f /home/runner/redis_ec2.pem -q -P ''
