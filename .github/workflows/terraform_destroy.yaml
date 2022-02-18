@@ -66,11 +66,12 @@ jobs:
           chmod +x provisioning/prepare_bucket.sh
           bash provisioning/prepare_bucket.sh
 
-      - name: Setup S3 Bucket
+      - name: Setup region
         run: |
           sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
           sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
           sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
+          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
 
       - name: Initialize Terraform
         run: terraform init -input=false

@@ -14,7 +14,7 @@ variable "instance_type" {
 variable "aws_region" {
   description = "Region for resources"
   type        = string
-  default     = "us-east-1"
+  default     = "AWS_REGION"
 }
 
 variable "root_block_device_size" {
