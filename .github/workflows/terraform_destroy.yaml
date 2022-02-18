@@ -61,16 +61,16 @@ jobs:
 
       - name: Run bucket prepare script
         run: |
-          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/prepare_bucket.sh
-          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" provisioning/prepare_bucket.sh
+          sed -i "s/[BUCKET_NAME]/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/prepare_bucket.sh
+          sed -i "s/[AWS_REGION]/${{ github.event.inputs.aws_region }}/g" provisioning/prepare_bucket.sh
           chmod +x provisioning/prepare_bucket.sh
           bash provisioning/prepare_bucket.sh
 
       - name: Setup S3 Bucket
         run: |
-          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
-          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
-          sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
+          sed -i "s/[BUCKET_NAME]/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
+          sed -i "s/[AWS_REGION]/${{ github.event.inputs.aws_region }}/g" terraform.tf
+          sed -i "s/[BUCKET_KEY_PATH]/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
 
       - name: Initialize Terraform
         run: terraform init -input=false
