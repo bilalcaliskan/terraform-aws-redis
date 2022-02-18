@@ -79,14 +79,14 @@ resource "aws_instance" "redis_server" {
   instance_type          = var.instance_type
   key_name               = aws_key_pair.redis_ec2_key.key_name
   subnet_id              = tolist(data.aws_subnet_ids.current.ids)[count.index % length(data.aws_subnet_ids.current.ids)]
-  
+
   tags = {
-    Name = "${var.instance_name_prefix}${count.index + 1}"
+    Name    = "${var.instance_name_prefix}${count.index + 1}"
     Service = "redis"
-    Region = var.aws_region
-    Ami    = data.aws_ami.ubuntu.id
+    Region  = var.aws_region
+    Ami     = data.aws_ami.ubuntu.id
   }
-  
+
   user_data = <<-EOF
     #!/bin/bash
     sudo apt update
