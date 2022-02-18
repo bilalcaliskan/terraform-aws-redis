@@ -59,11 +59,12 @@ jobs:
           aws-access-key-id: ${{ github.event.inputs.aws_access_key_id }}
           aws-secret-access-key: ${{ github.event.inputs.aws_secret_access_key }}
 
-      - name: Run key pair generator script
+      - name: Run bucket prepare script
         run: |
-          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/create_key_pair.sh
-          chmod +x provisioning/create_key_pair.sh
-          bash provisioning/create_key_pair.sh
+          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/prepare_bucket.sh
+          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" provisioning/prepare_bucket.sh
+          chmod +x provisioning/prepare_bucket.sh
+          bash provisioning/prepare_bucket.sh
 
       - name: Setup S3 Bucket
         run: |
