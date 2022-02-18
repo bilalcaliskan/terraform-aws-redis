@@ -3,7 +3,7 @@
 bucket_exists=$(aws s3api head-bucket --bucket BUCKET_NAME --region AWS_REGION 2>&1 || true)
 if [ ! -z "$bucket_exists" ]; then
     echo "bucket BUCKET_NAME does not exists on region AWS_REGION, creating an empty bucket"
-    response=$(aws s3api create-bucket --bucket BUCKET_NAME --region AWS_REGION)
+    response=$(aws s3api create-bucket --bucket BUCKET_NAME --region AWS_REGION --create-bucket-configuration LocationConstraint=AWS_REGION)
     if [[ $? -ne 0 ]]; then
         echo "ERROR: AWS reports create-bucket operation failed.\n$response"
         exit 1
