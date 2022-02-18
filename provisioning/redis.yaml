@@ -4,6 +4,9 @@
   hosts: all
   become: true
   pre_tasks:
+    - name: Wait 60 seconds for target hosts to come online
+      wait_for_connection:
+        timeout: 60
     - name: Full upgrade
       apt:
         update_cache: true

@@ -118,7 +118,6 @@ resource "null_resource" "ansible" {
   depends_on = [aws_instance.redis_server, local_file.hosts_cfg]
   provisioner "local-exec" {
     command = <<EOT
-      sleep 120;
       export ANSIBLE_HOST_KEY_CHECKING=False;
       ansible-galaxy install --force bilalcaliskan.redis,v0.0.6;
       ansible-playbook -i provisioning/hosts.ini provisioning/redis.yaml;
