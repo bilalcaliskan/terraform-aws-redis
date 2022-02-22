@@ -1,4 +1,5 @@
-# terraform-aws-redis
+# AWS Redis Terraform Module
+Terraform module which creates a fully functional Redis cluster on AWS EC2
 
 ### Example Usage
 ```
