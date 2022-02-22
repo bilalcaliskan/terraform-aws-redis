@@ -5,7 +5,6 @@
 module "redis" {
   source                    = "git::https://github.com/bilalcaliskan/terraform-aws-redis.git"
   instance_count            = 3
-  # instance_type           = ["sg-0525d8d1e1bd2c88d"]
   instance_type             = "t2.micro"
   aws_region                = "us-east-1"
   root_block_device_size    = "10"
