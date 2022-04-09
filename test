@@ -1,0 +1,11 @@
+pipeline
+- checkov
+  - pip3 install checkov
+  - terraform init
+  - terraform plan -out tf.plan
+  - terraform show -json tf.plan  > tf.json
+  - checkov -f tf.json
+
+
+pre-commit:
+- checkov
