@@ -83,6 +83,14 @@ jobs:
         id: plan
         run: terraform plan -input=false
 
+      - name: Checkov
+        id: checkov
+        run: |
+          - pip3 install --upgrade pip && pip3 install --upgrade setuptools
+          - pip3 install checkov
+          - terraform show -json > tf.json
+          - checkov -f tf.json
+
       - name: Apply Terraform
         if: steps.plan.outcome == 'success'
         id: apply
