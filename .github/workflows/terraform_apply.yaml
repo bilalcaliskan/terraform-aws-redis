@@ -71,20 +71,13 @@ jobs:
           sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
           sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
 
-      - name: Initialize Terraform
-        run: terraform init -input=false
-
-      - name: Plan Terraform
-        id: plan
-        run: terraform plan -input=false -out tf.plan
-
       - name: Checkov
         id: checkov
         run: |
           pip3 install --upgrade pip && pip3 install --upgrade setuptools
           pip3 install checkov
-          terraform show -json tf.plan > tf.json
-          checkov -f tf.json
+          chmod +x ./hack/checkov.sh
+          ./hack/checkov.sh
 
 #  plan_and_apply:
 #    name: Plan and Apply

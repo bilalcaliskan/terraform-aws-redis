@@ -17,6 +17,12 @@ variable "aws_region" {
   default     = "AWS_REGION"
 }
 
+/*variable "aws_region" {
+  description = "Region for resources"
+  type        = string
+  default     = "us-east-2"
+}*/
+
 variable "root_block_device_size" {
   description = "Size of the root block device"
   type        = string
@@ -36,6 +42,14 @@ variable "public_key" {
 variable "private_key" {
   default = "/home/runner/redis_ec2.pem"
 }
+
+/*variable "public_key" {
+  default = "~/.ssh/redis_ec2.pub"
+}
+
+variable "private_key" {
+  default = "~/.ssh/redis_ec2.pem"
+}*/
 
 variable "ansible_user" {
   default = "ubuntu"

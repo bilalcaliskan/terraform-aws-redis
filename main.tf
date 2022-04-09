@@ -79,6 +79,12 @@ resource "aws_instance" "redis_server" {
   instance_type          = var.instance_type
   key_name               = aws_key_pair.redis_ec2_key.key_name
   subnet_id              = tolist(data.aws_subnet_ids.current.ids)[count.index % length(data.aws_subnet_ids.current.ids)]
+  ebs_optimized          = true
+
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
 
   tags = {
     Name    = "${var.instance_name_prefix}${count.index + 1}"
