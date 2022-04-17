@@ -6,7 +6,7 @@ terraform {
     }
   }
 
-/*  backend "s3" {
+  /*backend "s3" {
     bucket  = "skysports-my-tf-states222"
     key     = "states/redis.tf"
     region  = "us-east-2"
