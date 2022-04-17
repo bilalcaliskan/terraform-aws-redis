@@ -127,6 +127,50 @@ jobs:
       - name: Run TFLint
         run: tflint -f compact
 
+  terrascan:
+    name: Terrascan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ github.event.inputs.aws_region }}
+          aws-access-key-id: ${{ github.event.inputs.aws_access_key_id }}
+          aws-secret-access-key: ${{ github.event.inputs.aws_secret_access_key }}
+
+      - name: Run bucket prepare script
+        run: |
+          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/prepare_bucket.sh
+          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" provisioning/prepare_bucket.sh
+          chmod +x provisioning/prepare_bucket.sh
+          bash provisioning/prepare_bucket.sh
+
+      - name: Pass input variables
+        run: |
+          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
+          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
+          sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
+          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
+          sed -i "s/AWS_INSTANCE_TYPE/${{ github.event.inputs.aws_instance_type }}/g" variables.tf
+
+      - name: Run Terrascan
+        id: terrascan
+        uses: accurics/terrascan-action@main
+        with:
+          iac_type: 'terraform'
+          iac_version: 'v14'
+          policy_type: 'aws'
+          only_warn: false
+          sarif_upload: true
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: terrascan.sarif
+
 #  plan_and_apply:
 #    name: Plan and Apply
 #    runs-on: ubuntu-latest
