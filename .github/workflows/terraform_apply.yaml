@@ -80,10 +80,11 @@ jobs:
         id: checkov
         run: |
           pip3 install --upgrade pip && pip3 install --upgrade setuptools
-          pip3 install checkov
+          pip3 install -U checkov
           terraform init -input=false
           terraform plan -input=false -out tf.plan
           terraform show -json tf.plan > tf.json
+          cat tf.json
           checkov -f tf.json --soft-fail-on CKV_AWS_126 --framework terraform_plan
 
 #  plan_and_apply:
