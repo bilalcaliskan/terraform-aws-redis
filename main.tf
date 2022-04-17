@@ -36,17 +36,19 @@ resource "aws_key_pair" "redis_ec2_key" {
 
 resource "aws_security_group" "redis-sg" {
   name        = "redis-sg"
-  description = "Allow inbound traffic to Redis EC2 instances from anywhere"
+  description = "Allow inbound traffic to Redis EC2 instances"
+
   tags = {
-    Name = "redis-sg"
-    #Service = "redis"
-    Region = var.aws_region
+    Name    = "redis-sg"
+    Service = "redis"
+    Region  = var.aws_region
   }
 
   ingress {
     from_port   = 6379
     to_port     = 6379
     protocol    = "tcp"
+    description = "Allow inbound traffic over port 6379 to all managed instances"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -54,6 +56,7 @@ resource "aws_security_group" "redis-sg" {
     from_port   = 16379
     to_port     = 16379
     protocol    = "tcp"
+    description = "Allow inbound traffic over port 16379 to all managed instances"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -61,6 +64,7 @@ resource "aws_security_group" "redis-sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
+    description = "Allow inbound traffic over port 22 to all managed instances"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -69,6 +73,7 @@ resource "aws_security_group" "redis-sg" {
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
+    description      = "Allow outbound traffic from managed instances to anywhere"
     ipv6_cidr_blocks = ["::/0"]
   }
 }
