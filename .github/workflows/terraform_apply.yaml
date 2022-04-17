@@ -49,11 +49,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-#      - name: Setup Terraform
-#        uses: hashicorp/setup-terraform@v1
-#        with:
-#          terraform_version: 1.1.8
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -81,23 +76,13 @@ jobs:
         uses: bridgecrewio/checkov-action@master
         with:
           directory: ./
-          skip_check: CKV_AWS_126
+          skip_check: CKV_AWS_126,CKV_AWS_24
           quiet: true
           soft_fail: false
           framework: terraform
           output_format: sarif
           download_external_modules: true
           log_level: WARNING
-
-#      - name: Checkov
-#        id: checkov
-#        run: |
-#          pip3 install --upgrade pip && pip3 install --upgrade setuptools
-#          pip3 install -U checkov
-#          terraform init -input=false
-#          terraform plan -input=false -out tf.plan
-#          terraform show -json tf.plan > tf.json
-#          checkov -f tf.json --soft-fail-on CKV_AWS_126 --framework terraform_plan
 
 #  plan_and_apply:
 #    name: Plan and Apply

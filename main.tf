@@ -35,7 +35,8 @@ resource "aws_key_pair" "redis_ec2_key" {
 }
 
 resource "aws_security_group" "redis-sg" {
-  name = "redis-sg"
+  name        = "redis-sg"
+  description = "Allow inbound traffic to Redis EC2 instances from anywhere"
   tags = {
     Name = "redis-sg"
     #Service = "redis"
