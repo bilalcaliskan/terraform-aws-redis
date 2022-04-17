@@ -84,7 +84,7 @@ jobs:
           terraform init -input=false
           terraform plan -input=false -out tf.plan
           terraform show -json tf.plan > tf.json
-          checkov -f tf.json --soft-fail-on CKV_AWS_126 --framework terraform_plan -v
+          checkov -f tf.json --soft-fail-on CKV_AWS_126 --framework terraform_plan
 
 #  plan_and_apply:
 #    name: Plan and Apply
