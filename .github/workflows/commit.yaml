@@ -1,0 +1,187 @@
+name: commit
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.8
+      - name: Run terraform fmt check
+        run: terraform fmt -check -diff -recursive .
+
+  checkov:
+    name: Checkov
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-region: ${{ github.event.inputs.aws_region }}
+#          aws-access-key-id: ${{ github.event.inputs.aws_access_key_id }}
+#          aws-secret-access-key: ${{ github.event.inputs.aws_secret_access_key }}
+#      - name: Run bucket prepare script
+#        run: |
+#          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/prepare_bucket.sh
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" provisioning/prepare_bucket.sh
+#          chmod +x provisioning/prepare_bucket.sh
+#          bash provisioning/prepare_bucket.sh
+#      - name: Pass input variables
+#        run: |
+#          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
+#          sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
+#          sed -i "s/AWS_INSTANCE_TYPE/${{ github.event.inputs.aws_instance_type }}/g" variables.tf
+      - name: Run Checkov action
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ./
+          skip_check: CKV_AWS_126,CKV_AWS_24
+          quiet: true
+          soft_fail: false
+          framework: terraform
+          output_format: sarif
+          download_external_modules: true
+          log_level: WARNING
+
+  tflint:
+    name: TFLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-region: ${{ github.event.inputs.aws_region }}
+#          aws-access-key-id: ${{ github.event.inputs.aws_access_key_id }}
+#          aws-secret-access-key: ${{ github.event.inputs.aws_secret_access_key }}
+#
+#      - name: Run bucket prepare script
+#        run: |
+#          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/prepare_bucket.sh
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" provisioning/prepare_bucket.sh
+#          chmod +x provisioning/prepare_bucket.sh
+#          bash provisioning/prepare_bucket.sh
+#
+#      - name: Pass input variables
+#        run: |
+#          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
+#          sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
+#          sed -i "s/AWS_INSTANCE_TYPE/${{ github.event.inputs.aws_instance_type }}/g" variables.tf
+
+      - uses: terraform-linters/setup-tflint@v1
+        name: Setup TFLint
+        with:
+          tflint_version: v0.35.0
+
+      - name: Show version
+        run: tflint --version
+
+      - name: Init TFLint
+        run: tflint --init
+
+      - name: Run TFLint
+        run: tflint -f compact
+
+  terrascan:
+    name: Terrascan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-region: ${{ github.event.inputs.aws_region }}
+#          aws-access-key-id: ${{ github.event.inputs.aws_access_key_id }}
+#          aws-secret-access-key: ${{ github.event.inputs.aws_secret_access_key }}
+#
+#      - name: Run bucket prepare script
+#        run: |
+#          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/prepare_bucket.sh
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" provisioning/prepare_bucket.sh
+#          chmod +x provisioning/prepare_bucket.sh
+#          bash provisioning/prepare_bucket.sh
+#
+#      - name: Pass input variables
+#        run: |
+#          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
+#          sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
+#          sed -i "s/AWS_INSTANCE_TYPE/${{ github.event.inputs.aws_instance_type }}/g" variables.tf
+
+      - name: Run Terrascan
+        id: terrascan
+        uses: accurics/terrascan-action@main
+        with:
+          iac_type: "terraform"
+          iac_version: "v14"
+          policy_type: "aws"
+          only_warn: false
+          sarif_upload: true
+          skip_rules: "AC_AWS_0480,AC_AWS_0227,AC_AWS_0276"
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        if: ${{ github.ref == 'refs/heads/master' }}
+        with:
+          sarif_file: terrascan.sarif
+
+  tfsec:
+    name: TFSec
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-region: ${{ github.event.inputs.aws_region }}
+#          aws-access-key-id: ${{ github.event.inputs.aws_access_key_id }}
+#          aws-secret-access-key: ${{ github.event.inputs.aws_secret_access_key }}
+#
+#      - name: Run bucket prepare script
+#        run: |
+#          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/prepare_bucket.sh
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" provisioning/prepare_bucket.sh
+#          chmod +x provisioning/prepare_bucket.sh
+#          bash provisioning/prepare_bucket.sh
+#
+#      - name: Pass input variables
+#        run: |
+#          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
+#          sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
+#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
+#          sed -i "s/AWS_INSTANCE_TYPE/${{ github.event.inputs.aws_instance_type }}/g" variables.tf
+
+      - name: tfsec
+        uses: aquasecurity/tfsec-sarif-action@v0.1.0
+        with:
+          sarif_file: tfsec.sarif
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        if: ${{ github.ref == 'refs/heads/master' }}
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: tfsec.sarif
