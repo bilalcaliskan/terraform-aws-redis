@@ -77,13 +77,13 @@ jobs:
 #          chmod +x provisioning/prepare_bucket.sh
 #          bash provisioning/prepare_bucket.sh
 #
-#      - name: Pass input variables
-#        run: |
-#          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
-#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
-#          sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
-#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
-#          sed -i "s/AWS_INSTANCE_TYPE/${{ github.event.inputs.aws_instance_type }}/g" variables.tf
+      - name: Pass input variables
+        run: |
+          sed -i "s/BUCKET_NAME/demo-bucket/g" terraform.tf
+          sed -i "s/AWS_REGION/us-east-1/g" terraform.tf
+          sed -i "s/BUCKET_KEY_PATH/redis/g" terraform.tf
+          sed -i "s/AWS_REGION/us-east-1/g" variables.tf
+          sed -i "s/AWS_INSTANCE_TYPE/t2.micro/g" variables.tf
 
       - uses: terraform-linters/setup-tflint@v1
         name: Setup TFLint
