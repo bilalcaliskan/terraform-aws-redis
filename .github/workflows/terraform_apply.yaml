@@ -84,6 +84,49 @@ jobs:
           download_external_modules: true
           log_level: WARNING
 
+  tflint:
+    name: TFLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ github.event.inputs.aws_region }}
+          aws-access-key-id: ${{ github.event.inputs.aws_access_key_id }}
+          aws-secret-access-key: ${{ github.event.inputs.aws_secret_access_key }}
+
+      - name: Run bucket prepare script
+        run: |
+          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/prepare_bucket.sh
+          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" provisioning/prepare_bucket.sh
+          chmod +x provisioning/prepare_bucket.sh
+          bash provisioning/prepare_bucket.sh
+
+      - name: Pass input variables
+        run: |
+          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
+          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
+          sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
+          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
+          sed -i "s/AWS_INSTANCE_TYPE/${{ github.event.inputs.aws_instance_type }}/g" variables.tf
+
+      - uses: terraform-linters/setup-tflint@v1
+        name: Setup TFLint
+        with:
+          tflint_version: v2.0.0
+
+      - name: Show version
+        run: tflint --version
+
+      - name: Init TFLint
+        run: tflint --init
+
+      - name: Run TFLint
+        run: tflint -f compact
+
 #  plan_and_apply:
 #    name: Plan and Apply
 #    runs-on: ubuntu-latest
