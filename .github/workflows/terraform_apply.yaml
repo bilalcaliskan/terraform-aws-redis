@@ -21,6 +21,10 @@ on:
       aws_secret_access_key:
         description: "Secret access key to access AWS"
         required: true
+      aws_instance_type:
+        description: "Instance type to be created"
+        required: true
+        default: "t2.micro"
 
 jobs:
   lint:
@@ -64,12 +68,13 @@ jobs:
           chmod +x provisioning/prepare_bucket.sh
           bash provisioning/prepare_bucket.sh
 
-      - name: Setup region
+      - name: Pass input variables
         run: |
           sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
           sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
           sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
           sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
+          sed -i "s/AWS_INSTANCE_TYPE/${{ github.event.inputs.aws_instance_type }}/g" variables.tf
 
       - name: Checkov
         id: checkov
@@ -113,12 +118,13 @@ jobs:
 #          chmod +x provisioning/prepare_bucket.sh
 #          bash provisioning/prepare_bucket.sh
 #
-#      - name: Setup region
+#      - name: Pass input variables
 #        run: |
 #          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
 #          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
 #          sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
 #          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
+#          sed -i "s/AWS_INSTANCE_TYPE/${{ github.event.inputs.aws_instance_type }}/g" variables.tf
 #
 #      - name: Initialize Terraform
 #        run: terraform init -input=false

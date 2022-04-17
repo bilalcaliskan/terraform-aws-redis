@@ -7,8 +7,7 @@ variable "instance_count" {
 variable "instance_type" {
   description = "Type of EC2 instance to use"
   type        = string
-  # TODO: change with proper instance type
-  default = "t2.micro"
+  default     = "AWS_INSTANCE_TYPE"
 }
 
 variable "aws_region" {
