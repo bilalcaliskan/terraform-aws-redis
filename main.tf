@@ -131,7 +131,7 @@ resource "null_resource" "ansible" {
   provisioner "local-exec" {
     command = <<EOT
       export ANSIBLE_HOST_KEY_CHECKING=False;
-      ansible-galaxy install --force bilalcaliskan.redis,v0.0.6;
+      ansible-galaxy install --force bilalcaliskan.redis;
       ansible-playbook -i provisioning/hosts.ini provisioning/redis.yaml;
     EOT
   }
