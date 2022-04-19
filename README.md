@@ -1,4 +1,6 @@
 # AWS Redis Terraform Module
+[![CI](https://github.com/bilalcaliskan/terraform-aws-redis/workflows/CI/badge.svg?event=push)](https://github.com/bilalcaliskan/terraform-aws-redis/actions?query=workflow%3ACI)
+
 Terraform module which creates a fully functional Redis cluster on AWS EC2
 
 ### Example Usage
