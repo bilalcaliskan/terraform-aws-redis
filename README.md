@@ -3,7 +3,10 @@
 
 Terraform module which creates a fully functional Redis cluster on AWS EC2
 
-### Example Usage
+### Usage
+There are 2 different usage method for that repository
+#### As Terraform Module
+You need to add below module configuration into your terraform configuration:
 ```
 module "redis" {
   source                    = "git::https://github.com/bilalcaliskan/terraform-aws-redis.git"
@@ -13,6 +16,12 @@ module "redis" {
   root_block_device_size    = "10"
 }
 ```
+### As Github Workflow
+I've created 2 different Github Workflow on that repository:
+- [Apply Workflow](https://github.com/bilalcaliskan/terraform-aws-redis/actions/workflows/workflow_apply.yaml)
+- [Destroy Workflow](https://github.com/bilalcaliskan/terraform-aws-redis/actions/workflows/workflow_destroy.yaml)
+
+These workflows will prompt you for required information as input variables.
 
 ### References
 - https://blog.testdouble.com/posts/2021-12-07-elevate-your-terraform-workflow-with-github-actions/
