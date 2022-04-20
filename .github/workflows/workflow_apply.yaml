@@ -3,7 +3,7 @@
 name: Terraform Apply Workflow
 
 on:
-  public
+  public:
   workflow_dispatch:
     inputs:
       aws_region:
