@@ -38,8 +38,6 @@ variable "private_key" {
   default = "/home/runner/redis_ec2.pem"
 }
 
-// dsf
-
 /*variable "instance_count" {
   description = "Number of EC2 instances to deploy"
   type        = number
@@ -53,7 +51,7 @@ variable "instance_count" {
 
   validation {
     condition     = var.instance_count > 0
-    error_message = "The instance_count value must be bigger than 0"
+    error_message = "The instance_count value must be bigger than 0."
   }
 }
 
@@ -64,7 +62,7 @@ variable "root_block_device_size" {
 
   validation {
     condition     = length(var.root_block_device_size) >= 10
-    error_message = "The root_block_device_size value must be at least 10"
+    error_message = "The root_block_device_size value must be at least 10."
   }
 }
 
