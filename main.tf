@@ -34,7 +34,7 @@ resource "aws_key_pair" "redis_ec2_key" {
   public_key = file(var.public_key)
 }
 
-resource "aws_security_group" "redis-sg" {
+resource "aws_security_group" "redis_sg" {
   name        = "redis-sg"
   description = "Allow inbound traffic to Redis EC2 instances"
 
@@ -81,7 +81,7 @@ resource "aws_security_group" "redis-sg" {
 resource "aws_instance" "redis_server" {
   count                  = var.instance_count
   ami                    = data.aws_ami.ubuntu.id
-  vpc_security_group_ids = [aws_security_group.redis-sg.id]
+  vpc_security_group_ids = [aws_security_group.redis_sg.id]
   instance_type          = var.instance_type
   key_name               = aws_key_pair.redis_ec2_key.key_name
   subnet_id              = tolist(data.aws_subnet_ids.current.ids)[count.index % length(data.aws_subnet_ids.current.ids)]
