@@ -23,5 +23,9 @@ I've created 2 different Github Workflow on that repository:
 
 These workflows will prompt you for required information as input variables.
 
+> **NOTICE**  
+> To be able to use that repository over Github Workflows, you must fork repository first and trigger workflows 
+> on your own repository. That's because of that only members of a repository can trigger workflows manually.
+
 ### References
 - https://blog.testdouble.com/posts/2021-12-07-elevate-your-terraform-workflow-with-github-actions/
