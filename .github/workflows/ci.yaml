@@ -30,7 +30,9 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.1.8
-      - name: Run terraform validate
+      - name: Init Terraform
+        run: terraform init -backend=false
+      - name: Run validate command
         run: terraform validate
 
   checkov:
@@ -65,12 +67,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-#      - name: Run bucket prepare script
-#        run: |
-#          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" provisioning/prepare_bucket.sh
-#          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" provisioning/prepare_bucket.sh
-#          chmod +x provisioning/prepare_bucket.sh
-#          bash provisioning/prepare_bucket.sh
       - name: Pass dummy input variables
         run: |
           sed -i "s/BUCKET_NAME/dummy-bucket/g" terraform.tf
