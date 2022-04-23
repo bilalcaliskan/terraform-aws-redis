@@ -6,6 +6,7 @@ Terraform module which creates a fully functional Redis cluster on AWS EC2 by co
 and [bilalcaliskan.redis Ansible role](https://github.com/bilalcaliskan/redis-ansible-role). `Tag` badge above indicates the 
 Ansible role version.
 
+
 ### Usage
 There are 2 different usage method for that repository
 #### As Terraform Module
