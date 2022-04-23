@@ -48,9 +48,9 @@ role and pass them over [provisioning/redis.yaml](provisioning/redis.yaml) file 
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.10.0 |
-| <a name="provider_local"></a> [local](#provider\_local) | 2.2.2 |
-| <a name="provider_null"></a> [null](#provider\_null) | 3.1.1 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.0.0 |
+| <a name="provider_local"></a> [local](#provider\_local) | n/a |
+| <a name="provider_null"></a> [null](#provider\_null) | n/a |
 
 ## Modules
 
@@ -88,7 +88,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_ec2_public_ips"></a> [ec2\_public\_ips](#output\_ec2\_public\_ips) | List of public IP addresses of the EC2 instances |
+| <a name="output_ec2_public_ips"></a> [ec2\_public\_ips](#output\_ec2\_public\_ips) | List dfof public IP addresses of the EC2 instances |
 <!-- END_TF_DOCS -->
 
 ### References
