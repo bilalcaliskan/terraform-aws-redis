@@ -91,5 +91,15 @@ No modules.
 | <a name="output_ec2_public_ips"></a> [ec2\_public\_ips](#output\_ec2\_public\_ips) | List of public IP addresses of the EC2 instances |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
-### References
+## Development
+This project requires below tools while developing:
+- [pre-commit](https://pre-commit.com/)
+- [terraform-docs](https://github.com/terraform-docs/terraform-docs) required for terraform_docs [pre-commit](https://pre-commit.com/) hook
+
+Make sure that you've installed the pre-commit configuration:
+```shell
+$ pre-commit install
+```
+
+## References
 - https://blog.testdouble.com/posts/2021-12-07-elevate-your-terraform-workflow-with-github-actions/
