@@ -10,7 +10,7 @@ repos:
         args:
           - --args=-no-color
           - --args=-diff
-          - --args=-write=false
+          - --args=-write=true
       - id: terraform_docs
         args:
           - --hook-config=--path-to-file=README.md
