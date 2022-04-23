@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Lint
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -21,7 +21,7 @@ jobs:
         run: terraform fmt -check -diff -recursive .
 
   validate:
-    name: Validate
+    name: validate
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -36,7 +36,7 @@ jobs:
         run: terraform validate
 
   checkov:
-    name: Checkov
+    name: checkov
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -62,7 +62,7 @@ jobs:
           log_level: WARNING
 
   tflint:
-    name: TFLint
+    name: tflint
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -86,7 +86,7 @@ jobs:
         run: tflint -f compact
 
   terrascan:
-    name: Terrascan
+    name: terrascan
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -115,7 +115,7 @@ jobs:
           sarif_file: terrascan.sarif
 
   tfsec:
-    name: TFSec
+    name: tfsec
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -153,3 +153,5 @@ jobs:
           git-push: "true"
           git-commit-message: "terraform-docs: automated action [skip ci]"
           git-push-sign-off: true
+          git-push-user-name: bilalcaliskan
+          git-push-user-email: bilalcaliskan@protonmail.com
