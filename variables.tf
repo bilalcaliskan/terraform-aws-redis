@@ -31,11 +31,13 @@ variable "private_key" {
 }*/
 
 variable "public_key" {
-  default = "/home/runner/redis_ec2.pub"
+  description = "Public key for ec2 instances to use"
+  default     = "/home/runner/redis_ec2.pub"
 }
 
 variable "private_key" {
-  default = "/home/runner/redis_ec2.pem"
+  description = "Private key for ec2 instances to use"
+  default     = "/home/runner/redis_ec2.pem"
 }
 
 /*variable "instance_count" {
@@ -73,7 +75,8 @@ variable "instance_name_prefix" {
 }
 
 variable "ansible_user" {
-  default = "ubuntu"
+  description = "Ansible user to use within machines"
+  default     = "ubuntu"
 }
 
 variable "key_pair_name" {
