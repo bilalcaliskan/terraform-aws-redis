@@ -13,6 +13,6 @@ repos:
           - --args=-write=true
       - id: terraform_docs
         args:
-          - --hook-config=--path-to-file=README.md
+          - --hook-config=--path-to-file=MODULE.md
           - --hook-config=--add-to-existing-file=true
           - --hook-config=--create-file-if-not-exist=true

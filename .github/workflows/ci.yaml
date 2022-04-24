@@ -148,10 +148,8 @@ jobs:
         uses: terraform-docs/gh-actions@main
         with:
           working-dir: .
-          output-file: README.md
+          output-file: MODULE.md
           output-method: inject
           git-push: "true"
           git-commit-message: "terraform-docs: automated action [skip ci]"
           git-push-sign-off: true
-          git-push-user-name: bilalcaliskan
-          git-push-user-email: bilalcaliskan@protonmail.com
