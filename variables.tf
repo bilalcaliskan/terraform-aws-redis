@@ -61,8 +61,8 @@ variable "root_block_device_size" {
   default     = "10"
 
   validation {
-    condition     = length(var.root_block_device_size) >= 10
-    error_message = "The root_block_device_size value must be at least 10."
+    condition     = length(var.root_block_device_size) >= 8
+    error_message = "The root_block_device_size value must be at least 8."
   }
 }
 
