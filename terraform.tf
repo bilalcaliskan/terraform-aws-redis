@@ -13,12 +13,7 @@ terraform {
     encrypt = true
   }*/
 
-  backend "s3" {
-    bucket  = var.bucket_name
-    key     = "states/${var.bucket_key_path}"
-    region  = var.aws_region
-    encrypt = true
-  }
+  backend "s3" {}
 
   required_version = "~> 1.1.0"
 }

@@ -9,16 +9,6 @@ variable "aws_region" {
   type        = string
 }
 
-variable "bucket_key_path" {
-  description = "Path for the state locations on bucket"
-  type        = string
-}
-
-variable "bucket_name" {
-  description = "Bucket name to store states"
-  type        = string
-}
-
 /*variable "instance_type" {
   description = "Type of EC2 instance to use"
   type        = string

@@ -38,8 +38,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_ansible_user"></a> [ansible\_user](#input\_ansible\_user) | Ansible user to use within machines | `string` | `"ubuntu"` | no |
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | Region for resources | `string` | n/a | yes |
-| <a name="input_bucket_key_path"></a> [bucket\_key\_path](#input\_bucket\_key\_path) | Path for the state locations on bucket | `string` | n/a | yes |
-| <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | Bucket name to store states | `string` | n/a | yes |
 | <a name="input_instance_count"></a> [instance\_count](#input\_instance\_count) | Number of EC2 instances to deploy | `number` | `1` | no |
 | <a name="input_instance_name_prefix"></a> [instance\_name\_prefix](#input\_instance\_name\_prefix) | Instance name prefix while creating EC2 instances | `string` | `"redisnode0"` | no |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | Type of EC2 instance to use | `string` | n/a | yes |

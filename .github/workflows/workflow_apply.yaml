@@ -1,5 +1,4 @@
 ---
-
 name: Terraform Apply Workflow
 
 on:
@@ -76,13 +75,17 @@ jobs:
 
       - name: Pass input variables
         run: |
-          echo "bucket_name = ${{ github.event.inputs.aws_bucket_name }}" >> terraform.tfvars
+          echo "passing backend variables"
+          echo "bucket = ${{ github.event.inputs.aws_bucket_name }}" >> config.s3.tfbackend
+          echo "key = \"states/${{ github.event.inputs.aws_bucket_name }}\"" >> config.s3.tfbackend
+          echo "region = ${{ github.event.inputs.aws_region }}" >> config.s3.tfbackend
+          echo "encrypt = true"
+          echo "passing module variables"
           echo "aws_region = ${{ github.event.inputs.aws_region }}" >> terraform.tfvars
-          echo "bucket_key_path = ${{ github.event.inputs.aws_bucket_key_path }}" >> terraform.tfvars
           echo "instance_type = ${{ github.event.inputs.aws_instance_type }}" >> terraform.tfvars
 
       - name: Initialize Terraform
-        run: terraform init -input=false
+        run: terraform init -input=false -backend-config=config.s3.tfbackend
 
       - name: Plan Terraform
         id: plan
