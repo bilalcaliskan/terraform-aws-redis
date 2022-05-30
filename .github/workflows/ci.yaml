@@ -43,11 +43,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Pass dummy input variables
         run: |
-          sed -i "s/BUCKET_NAME/dummy-bucket/g" terraform.tf
-          sed -i "s/AWS_REGION/us-east-1/g" terraform.tf
-          sed -i "s/BUCKET_KEY_PATH/states/g" terraform.tf
-          sed -i "s/AWS_REGION/us-east-1/g" variables.tf
-          sed -i "s/AWS_INSTANCE_TYPE/t2.micro/g" variables.tf
+          echo "bucket_name = \"dummy-bucket\"" >> terraform.tfvars
+          echo "aws_region = \"us-east-1\"" >> terraform.tfvars
+          echo "bucket_key_path = \"states\"" >> terraform.tfvars
+          echo "instance_type = \"t2.micro\"" >> terraform.tfvars
       - name: Run Checkov action
         id: checkov
         uses: bridgecrewio/checkov-action@master
@@ -69,11 +68,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Pass dummy input variables
         run: |
-          sed -i "s/BUCKET_NAME/dummy-bucket/g" terraform.tf
-          sed -i "s/AWS_REGION/us-east-1/g" terraform.tf
-          sed -i "s/BUCKET_KEY_PATH/states/g" terraform.tf
-          sed -i "s/AWS_REGION/us-east-1/g" variables.tf
-          sed -i "s/AWS_INSTANCE_TYPE/t2.micro/g" variables.tf
+          echo "bucket_name = \"dummy-bucket\"" >> terraform.tfvars
+          echo "aws_region = \"us-east-1\"" >> terraform.tfvars
+          echo "bucket_key_path = \"states\"" >> terraform.tfvars
+          echo "instance_type = \"t2.micro\"" >> terraform.tfvars
       - uses: terraform-linters/setup-tflint@v1
         name: Setup TFLint
         with:
@@ -93,11 +91,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Pass dummy input variables
         run: |
-          sed -i "s/BUCKET_NAME/dummy-bucket/g" terraform.tf
-          sed -i "s/AWS_REGION/us-east-1/g" terraform.tf
-          sed -i "s/BUCKET_KEY_PATH/states/g" terraform.tf
-          sed -i "s/AWS_REGION/us-east-1/g" variables.tf
-          sed -i "s/AWS_INSTANCE_TYPE/t2.micro/g" variables.tf
+          echo "bucket_name = \"dummy-bucket\"" >> terraform.tfvars
+          echo "aws_region = \"us-east-1\"" >> terraform.tfvars
+          echo "bucket_key_path = \"states\"" >> terraform.tfvars
+          echo "instance_type = \"t2.micro\"" >> terraform.tfvars
       - name: Run Terrascan
         id: terrascan
         uses: accurics/terrascan-action@main
@@ -122,11 +119,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Pass dummy input variables
         run: |
-          sed -i "s/BUCKET_NAME/dummy-bucket/g" terraform.tf
-          sed -i "s/AWS_REGION/us-east-1/g" terraform.tf
-          sed -i "s/BUCKET_KEY_PATH/states/g" terraform.tf
-          sed -i "s/AWS_REGION/us-east-1/g" variables.tf
-          sed -i "s/AWS_INSTANCE_TYPE/t2.micro/g" variables.tf
+          echo "bucket_name = \"dummy-bucket\"" >> terraform.tfvars
+          echo "aws_region = \"us-east-1\"" >> terraform.tfvars
+          echo "bucket_key_path = \"states\"" >> terraform.tfvars
+          echo "instance_type = \"t2.micro\"" >> terraform.tfvars
       - name: tfsec
         uses: aquasecurity/tfsec-sarif-action@v0.1.0
         with:

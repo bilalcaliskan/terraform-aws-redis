@@ -68,10 +68,10 @@ jobs:
 
       - name: Setup region
         run: |
-          sed -i "s/BUCKET_NAME/${{ github.event.inputs.aws_bucket_name }}/g" terraform.tf
-          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" terraform.tf
-          sed -i "s/BUCKET_KEY_PATH/${{ github.event.inputs.aws_bucket_key_path }}/g" terraform.tf
-          sed -i "s/AWS_REGION/${{ github.event.inputs.aws_region }}/g" variables.tf
+          echo "bucket_name = ${{ github.event.inputs.aws_bucket_name }}" >> terraform.tfvars
+          echo "aws_region = ${{ github.event.inputs.aws_region }}" >> terraform.tfvars
+          echo "bucket_key_path = ${{ github.event.inputs.aws_bucket_key_path }}" >> terraform.tfvars
+          echo "instance_type = ${{ github.event.inputs.aws_instance_type }}" >> terraform.tfvars
 
       - name: Initialize Terraform
         run: terraform init -input=false

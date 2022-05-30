@@ -6,7 +6,6 @@ terraform {
     }
   }
 
-
   /*backend "s3" {
     bucket  = "skysports-my-tf-states222"
     key     = "states/redis.tf"
@@ -15,9 +14,9 @@ terraform {
   }*/
 
   backend "s3" {
-    bucket  = "BUCKET_NAME"
-    key     = "states/BUCKET_KEY_PATH"
-    region  = "AWS_REGION"
+    bucket  = var.bucket_name
+    key     = "states/${var.bucket_key_path}"
+    region  = var.aws_region
     encrypt = true
   }
 
