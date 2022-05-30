@@ -76,10 +76,10 @@ jobs:
       - name: Pass input variables
         run: |
           echo "passing backend variables"
-          echo "bucket = ${{ github.event.inputs.aws_bucket_name }}" >> config.s3.tfbackend
+          echo "bucket = \"${{ github.event.inputs.aws_bucket_name }}\"" >> config.s3.tfbackend
           echo "key = \"states/${{ github.event.inputs.aws_bucket_name }}\"" >> config.s3.tfbackend
-          echo "region = ${{ github.event.inputs.aws_region }}" >> config.s3.tfbackend
-          echo "encrypt = true"
+          echo "region = \"${{ github.event.inputs.aws_region }}\"" >> config.s3.tfbackend
+          echo "encrypt = true" >> config.s3.tfbackend
           echo "passing module variables"
           echo "aws_region = ${{ github.event.inputs.aws_region }}" >> terraform.tfvars
           echo "instance_type = ${{ github.event.inputs.aws_instance_type }}" >> terraform.tfvars
