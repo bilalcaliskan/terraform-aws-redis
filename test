@@ -1,8 +1,0 @@
-pipeline
-- lint
-- checkov
-- tflint
-- terrascan
-
-pre-commit:
-- checkov
