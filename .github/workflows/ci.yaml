@@ -53,7 +53,7 @@ jobs:
         uses: bridgecrewio/checkov-action@master
         with:
           directory: ./
-          skip_check: CKV_AWS_126,CKV_AWS_24
+          skip_check: CKV_AWS_126,CKV_AWS_24,CKV_AWS_135
           quiet: true
           soft_fail: false
           framework: terraform
