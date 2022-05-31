@@ -9,7 +9,7 @@ plan: init
 apply: init plan
 	terraform apply -input=false -auto-approve
 
-destroy: init
+destroy: init plan
 	terraform destroy -auto-approve
 
 validate:
