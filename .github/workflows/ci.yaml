@@ -19,7 +19,7 @@ jobs:
         with:
           terraform_version: 1.1.8
       - name: Run terraform fmt check
-        run: terraform fmt -check -diff -recursive .
+        run: make fmt
 
   validate:
     name: validate
@@ -34,7 +34,7 @@ jobs:
       - name: Init Terraform
         run: terraform init -backend=false
       - name: Run validate command
-        run: terraform validate
+        run: make validate
 
   checkov:
     name: checkov
@@ -78,11 +78,11 @@ jobs:
         with:
           tflint_version: v0.35.0
       - name: Show version
-        run: tflint --version
+        run: make tflint_version
       - name: Init TFLint
-        run: tflint --init
+        run: make tflint_init
       - name: Run TFLint
-        run: tflint -f compact
+        run: make tflint_run
 
   terrascan:
     name: terrascan

@@ -10,8 +10,11 @@ data "aws_vpc" "default" {
   default = true
 }
 
-data "aws_subnet_ids" "current" {
-  vpc_id = data.aws_vpc.default.id
+data "aws_subnets" "current" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
 }
 
 data "aws_ami" "ubuntu" {
@@ -84,8 +87,8 @@ resource "aws_instance" "redis_server" {
   vpc_security_group_ids = [aws_security_group.redis_sg.id]
   instance_type          = var.instance_type
   key_name               = aws_key_pair.redis_ec2_key.key_name
-  subnet_id              = tolist(data.aws_subnet_ids.current.ids)[count.index % length(data.aws_subnet_ids.current.ids)]
-  ebs_optimized          = true
+  subnet_id              = tolist(data.aws_subnets.current.ids)[count.index % length(data.aws_subnets.current.ids)]
+  // ebs_optimized          = true
 
   metadata_options {
     http_endpoint = "enabled"

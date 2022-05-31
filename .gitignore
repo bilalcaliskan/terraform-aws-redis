@@ -32,3 +32,5 @@ test
 .idea
 tf.*
 terraform.tfvars
+*.auto.tfvars
+config.s3.tfbackend

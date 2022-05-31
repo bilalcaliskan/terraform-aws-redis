@@ -77,13 +77,13 @@ jobs:
           echo "instance_type = \"${{ github.event.inputs.aws_instance_type }}\"" >> redis.auto.tfvars
 
       - name: Initialize Terraform
-        run: terraform init -input=false -backend-config=config.s3.tfbackend
+        run: make init
 
       - name: Plan Terraform
         id: plan
-        run: terraform plan -input=false
+        run: make plan
 
       - name: Destroy Terraform
         if: steps.plan.outcome == 'success'
         id: destroy
-        run: terraform destroy -input=false -auto-approve
+        run: make destroy
