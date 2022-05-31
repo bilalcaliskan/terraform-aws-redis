@@ -2,7 +2,7 @@
 
 - name: Pre play to wait target hosts come online
   hosts: all
-  gather_facts: false
+  gather_facts: no
   tasks:
     - name: Wait 60 seconds for target hosts to come online
       wait_for_connection:
@@ -10,8 +10,13 @@
 
 - name: Redis role execution play
   hosts: all
-  become: true
-  gather_facts: true
+  become: yes
+  gather_facts: yes
+  pre_tasks:
+    - name: Full upgrade
+      apt:
+        update_cache: yes
+        upgrade: full
   roles:
     - role: bilalcaliskan.redis
       vars:
