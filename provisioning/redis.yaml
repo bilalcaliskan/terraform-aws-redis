@@ -12,11 +12,6 @@
   hosts: all
   become: true
   gather_facts: true
-  pre_tasks:
-    - name: Full upgrade
-      apt:
-        update_cache: true
-        upgrade: full
   roles:
     - role: bilalcaliskan.redis
       vars:
