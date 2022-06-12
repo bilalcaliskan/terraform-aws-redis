@@ -77,7 +77,7 @@ jobs:
         run: |
           echo "passing backend variables"
           echo "bucket = \"${{ github.event.inputs.aws_bucket_name }}\"" >> config.s3.tfbackend
-          echo "key = \"states/${{ github.event.inputs.aws_bucket_name }}\"" >> config.s3.tfbackend
+          echo "key = \"states/${{ github.event.inputs.aws_bucket_key_path }}\"" >> config.s3.tfbackend
           echo "region = \"${{ github.event.inputs.aws_region }}\"" >> config.s3.tfbackend
           echo "encrypt = true" >> config.s3.tfbackend
           echo "passing module variables"
